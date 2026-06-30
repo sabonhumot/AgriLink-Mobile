@@ -4,11 +4,13 @@ import {
   TouchableOpacity,
   ScrollView,
   StatusBar,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { mockBuyer } from "@/data/buyerData";
+import { router } from "expo-router";
 
 export default function ProfileScreen() {
   const { top } = useSafeAreaInsets();
@@ -82,7 +84,16 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity activeOpacity={0.8} style={styles.logoutBtn}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.logoutBtn}
+          onPress={() => {
+            Alert.alert("Sign Out", "Are you sure you want to sign out?", [
+              { text: "Cancel", style: "cancel" },
+              { text: "Sign Out", style: "destructive", onPress: () => router.replace("/") },
+            ]);
+          }}
+        >
           <Ionicons name="log-out-outline" size={18} color={Colors.error} />
           <Text style={styles.logoutText}>Sign Out</Text>
         </TouchableOpacity>

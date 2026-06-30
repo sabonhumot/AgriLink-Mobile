@@ -10,25 +10,25 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useCart } from "@/context/CartContext";
+import { useReservation } from "@/context/ReservationContext";
 
-export default function CartScreen() {
+export default function ReservationsScreen() {
   const { top } = useSafeAreaInsets();
-  const { items, removeItem, updateQuantity, totalPrice } = useCart();
+  const { items, removeItem, updateQuantity, totalPrice } = useReservation();
 
   if (items.length === 0) {
     return (
       <View style={{ flex: 1, backgroundColor: "#F8FAF9" }}>
         <StatusBar barStyle="dark-content" />
         <View style={[styles.header, { paddingTop: top + 12 }]}>
-          <Text style={styles.headerTitle}>Cart</Text>
+          <Text style={styles.headerTitle}>Reservations</Text>
         </View>
         <View style={styles.emptyState}>
           <View style={styles.emptyIconCircle}>
-            <Ionicons name="cart-outline" size={28} color={Colors.primary} />
+            <Ionicons name="bookmark-outline" size={28} color={Colors.primary} />
           </View>
-          <Text style={styles.emptyTitle}>Your cart is empty</Text>
-          <Text style={styles.emptyDesc}>Browse crops and add items to your cart</Text>
+          <Text style={styles.emptyTitle}>No reservations yet</Text>
+          <Text style={styles.emptyDesc}>Browse crops and reserve items from local farmers</Text>
           <TouchableOpacity
             activeOpacity={0.8}
             style={styles.browseBtn}
@@ -46,7 +46,7 @@ export default function CartScreen() {
       <StatusBar barStyle="dark-content" />
 
       <View style={[styles.header, { paddingTop: top + 12 }]}>
-        <Text style={styles.headerTitle}>Cart</Text>
+        <Text style={styles.headerTitle}>Reservations</Text>
         <Text style={styles.headerCount}>{items.length} item{items.length !== 1 ? "s" : ""}</Text>
       </View>
 
@@ -55,13 +55,13 @@ export default function CartScreen() {
         showsVerticalScrollIndicator={false}
       >
         {items.map((item) => (
-          <View key={item.crop.id} style={styles.cartCard}>
-            <Image source={{ uri: item.crop.image }} style={styles.cartImg} />
-            <View style={styles.cartBody}>
-              <View style={styles.cartTop}>
+          <View key={item.crop.id} style={styles.card}>
+            <Image source={{ uri: item.crop.image }} style={styles.cardImg} />
+            <View style={styles.cardBody}>
+              <View style={styles.cardTop}>
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.cartName} numberOfLines={1}>{item.crop.name}</Text>
-                  <Text style={styles.cartFarmer}>{item.crop.farmer}</Text>
+                  <Text style={styles.cardName} numberOfLines={1}>{item.crop.name}</Text>
+                  <Text style={styles.cardFarmer}>{item.crop.farmer}</Text>
                 </View>
                 <TouchableOpacity
                   activeOpacity={0.7}
@@ -72,8 +72,8 @@ export default function CartScreen() {
                 </TouchableOpacity>
               </View>
 
-              <View style={styles.cartBottom}>
-                <Text style={styles.cartPrice}>₱{item.crop.price}<Text style={styles.cartUnit}>/{item.crop.unit}</Text></Text>
+              <View style={styles.cardBottom}>
+                <Text style={styles.cardPrice}>₱{item.crop.price}<Text style={styles.cardUnit}>/{item.crop.unit}</Text></Text>
                 <View style={styles.qtyRow}>
                   <TouchableOpacity
                     activeOpacity={0.7}
@@ -93,7 +93,7 @@ export default function CartScreen() {
                 </View>
               </View>
 
-              <Text style={styles.cartSubtotal}>
+              <Text style={styles.cardSubtotal}>
                 Subtotal: ₱{(item.crop.price * item.quantity).toLocaleString()}
               </Text>
             </View>
@@ -109,11 +109,11 @@ export default function CartScreen() {
         </View>
         <TouchableOpacity
           activeOpacity={0.8}
-          style={styles.checkoutBtn}
+          style={styles.confirmBtn}
           onPress={() => router.push("/(buyer)/checkout")}
         >
-          <Text style={styles.checkoutBtnText}>Checkout</Text>
-          <Ionicons name="arrow-forward" size={16} color={Colors.white} />
+          <Ionicons name="checkmark-circle-outline" size={18} color={Colors.white} />
+          <Text style={styles.confirmBtnText}>Confirm Reservation</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -141,7 +141,7 @@ const styles = {
     paddingBottom: 100,
     gap: 12,
   },
-  cartCard: {
+  card: {
     flexDirection: "row" as const,
     backgroundColor: Colors.white,
     borderRadius: 16,
@@ -152,28 +152,28 @@ const styles = {
     shadowRadius: 4,
     elevation: 1,
   },
-  cartImg: {
+  cardImg: {
     width: 90,
     backgroundColor: Colors.surfaceAlt,
   },
-  cartBody: {
+  cardBody: {
     flex: 1,
     padding: 12,
     justifyContent: "space-between" as const,
   },
-  cartTop: {
+  cardTop: {
     flexDirection: "row" as const,
     alignItems: "flex-start" as const,
     gap: 8,
     marginBottom: 8,
   },
-  cartName: {
+  cardName: {
     fontSize: 14,
     fontWeight: "700" as const,
     color: Colors.text,
     marginBottom: 2,
   },
-  cartFarmer: {
+  cardFarmer: {
     fontSize: 12,
     color: Colors.textMuted,
   },
@@ -185,18 +185,18 @@ const styles = {
     alignItems: "center" as const,
     justifyContent: "center" as const,
   },
-  cartBottom: {
+  cardBottom: {
     flexDirection: "row" as const,
     justifyContent: "space-between" as const,
     alignItems: "center" as const,
     marginBottom: 6,
   },
-  cartPrice: {
+  cardPrice: {
     fontSize: 15,
     fontWeight: "800" as const,
     color: Colors.primary,
   },
-  cartUnit: {
+  cardUnit: {
     fontSize: 11,
     fontWeight: "500" as const,
     color: Colors.textMuted,
@@ -221,7 +221,7 @@ const styles = {
     width: 28,
     textAlign: "center" as const,
   },
-  cartSubtotal: {
+  cardSubtotal: {
     fontSize: 12,
     color: Colors.textSecondary,
     fontWeight: "500" as const,
@@ -248,7 +248,7 @@ const styles = {
     fontWeight: "800" as const,
     color: Colors.primary,
   },
-  checkoutBtn: {
+  confirmBtn: {
     flexDirection: "row" as const,
     height: 48,
     borderRadius: 14,
@@ -256,9 +256,9 @@ const styles = {
     alignItems: "center" as const,
     justifyContent: "center" as const,
     gap: 8,
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
   },
-  checkoutBtnText: {
+  confirmBtnText: {
     fontSize: 15,
     fontWeight: "700" as const,
     color: Colors.white,
@@ -288,6 +288,8 @@ const styles = {
     fontSize: 14,
     color: Colors.textMuted,
     marginBottom: 20,
+    textAlign: "center" as const,
+    paddingHorizontal: 40,
   },
   browseBtn: {
     paddingHorizontal: 24,

@@ -1,35 +1,35 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { Crop } from "@/data/crops";
 
-export interface CartItem {
+export interface ReservationItem {
   crop: Crop;
   quantity: number;
 }
 
-interface CartContextType {
-  items: CartItem[];
-  addItem: (crop: Crop, quantity: number) => void;
+interface ReservationContextType {
+  items: ReservationItem[];
+  reserve: (crop: Crop, quantity: number) => void;
   removeItem: (cropId: string) => void;
   updateQuantity: (cropId: string, quantity: number) => void;
-  clearCart: () => void;
+  clearReservations: () => void;
   totalItems: number;
   totalPrice: number;
 }
 
-const CartContext = createContext<CartContextType>({
+const ReservationContext = createContext<ReservationContextType>({
   items: [],
-  addItem: () => {},
+  reserve: () => {},
   removeItem: () => {},
   updateQuantity: () => {},
-  clearCart: () => {},
+  clearReservations: () => {},
   totalItems: 0,
   totalPrice: 0,
 });
 
-export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+export function ReservationProvider({ children }: { children: ReactNode }) {
+  const [items, setItems] = useState<ReservationItem[]>([]);
 
-  const addItem = (crop: Crop, quantity: number) => {
+  const reserve = (crop: Crop, quantity: number) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.crop.id === crop.id);
       if (existing) {
@@ -57,18 +57,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
     );
   };
 
-  const clearCart = () => setItems([]);
+  const clearReservations = () => setItems([]);
 
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = items.reduce((sum, i) => sum + i.crop.price * i.quantity, 0);
 
   return (
-    <CartContext.Provider
-      value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice }}
+    <ReservationContext.Provider
+      value={{ items, reserve, removeItem, updateQuantity, clearReservations, totalItems, totalPrice }}
     >
       {children}
-    </CartContext.Provider>
+    </ReservationContext.Provider>
   );
 }
 
-export const useCart = () => useContext(CartContext);
+export const useReservation = () => useContext(ReservationContext);

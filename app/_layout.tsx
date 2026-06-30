@@ -1,16 +1,16 @@
 import { Stack } from "expo-router";
 import { Colors } from "@/constants/Colors";
-import { CartProvider } from "@/context/CartContext";
+import { ReservationProvider } from "@/context/ReservationContext";
 
 export default function RootLayout() {
   return (
-    <CartProvider>
+    <ReservationProvider>
       <Stack
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: Colors.background },
         }}
       />
-    </CartProvider>
+    </ReservationProvider>
   );
 }

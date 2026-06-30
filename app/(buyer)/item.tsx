@@ -13,14 +13,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { crops } from "@/data/crops";
-import { useCart } from "@/context/CartContext";
+import { useReservation } from "@/context/ReservationContext";
 
 export default function ItemDetailsScreen() {
-  const { top } = useSafeAreaInsets();
+  const { top, bottom } = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
   const crop = crops.find((c) => c.id === id);
   const [quantity, setQuantity] = useState(1);
-  const { addItem } = useCart();
+  const { reserve } = useReservation();
 
   if (!crop) {
     return (
@@ -42,14 +42,14 @@ export default function ItemDetailsScreen() {
       ? "#F59E0B"
       : Colors.primary;
 
-  const handleAddToCart = () => {
-    addItem(crop, quantity);
+  const handleReserve = () => {
+    reserve(crop, quantity);
     Alert.alert(
-      "Added to Cart",
-      `${crop.name} x ${quantity} ${crop.unit} added to your cart.`,
+      "Reserved",
+      `${crop.name} x ${quantity} ${crop.unit} has been reserved.`,
       [
-        { text: "Continue Shopping", onPress: () => router.back() },
-        { text: "View Cart", onPress: () => router.push("/(buyer)/cart") },
+        { text: "Continue Browsing", onPress: () => router.back() },
+        { text: "View Reservations", onPress: () => router.push("/(buyer)/reservations") },
       ]
     );
   };
@@ -58,24 +58,26 @@ export default function ItemDetailsScreen() {
     <View style={{ flex: 1, backgroundColor: "#F8FAF9" }}>
       <StatusBar barStyle="dark-content" />
 
-      {/* Hero Image */}
-      <View style={[styles.heroWrap, { paddingTop: top }]}>
-        <Image source={{ uri: crop.image }} style={styles.heroImage} />
-        <View style={[styles.heroOverlay, { paddingTop: top + 8 }]}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={styles.backBtn}
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={20} color={Colors.text} />
-          </TouchableOpacity>
-        </View>
+      {/* Fixed Back Button */}
+      <View style={[styles.backBtnWrap, { top: top + 8 }]}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.backBtn}
+          onPress={() => router.back()}
+        >
+          <Ionicons name="arrow-back" size={20} color={Colors.text} />
+        </TouchableOpacity>
       </View>
 
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, { paddingBottom: 220 }]}
         showsVerticalScrollIndicator={false}
       >
+        {/* Hero Image */}
+        <View style={[styles.heroWrap, { paddingTop: top }]}>
+          <Image source={{ uri: crop.image }} style={styles.heroImage} />
+        </View>
+
         {/* Title Section */}
         <View style={styles.titleSection}>
           <View style={styles.titleRow}>
@@ -171,14 +173,12 @@ export default function ItemDetailsScreen() {
             <Ionicons name="chatbubble-outline" size={16} color={Colors.primary} />
           </TouchableOpacity>
         </View>
-
-        {/* Bottom spacer for floating bar */}
-        <View style={{ height: 20 }} />
       </ScrollView>
 
-      {/* Bottom Bar */}
-      <View style={[styles.bottomBar, { paddingBottom: 16 }]}>
-        <View style={styles.qtyControl}>
+      {/* Sticky Bottom Bar */}
+      <View style={[styles.bottomBar, { paddingBottom: bottom + 12 }]}>
+        {/* Quantity Selector */}
+        <View style={styles.qtySection}>
           <TouchableOpacity
             activeOpacity={0.7}
             style={styles.qtyBtn}
@@ -195,12 +195,22 @@ export default function ItemDetailsScreen() {
             <Ionicons name="add" size={18} color={Colors.primary} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity activeOpacity={0.8} style={styles.orderBtn} onPress={handleAddToCart}>
-          <Text style={styles.orderBtnText}>₱{subtotal.toLocaleString()}</Text>
-          <View style={styles.orderBtnDivider} />
-          <Ionicons name="cart-outline" size={16} color={Colors.white} />
-          <Text style={styles.orderBtnLabel}>Add to Cart</Text>
+
+        {/* Reserve Button */}
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.reserveBtn}
+          onPress={handleReserve}
+        >
+          <Ionicons name="bookmark-outline" size={18} color={Colors.white} />
+          <Text style={styles.reserveBtnText}>Reserve</Text>
         </TouchableOpacity>
+
+        {/* Total */}
+        <View style={styles.totalWrap}>
+          <Text style={styles.totalLabel}>Estimated Total</Text>
+          <Text style={styles.totalValue}>₱{subtotal.toLocaleString()}</Text>
+        </View>
       </View>
     </View>
   );
@@ -210,22 +220,19 @@ const styles = {
   heroWrap: {
     height: 280,
     backgroundColor: Colors.surfaceAlt,
+    borderRadius: 16,
+    overflow: "hidden" as const,
+    marginBottom: 16,
   },
   heroImage: {
     width: "100%",
     height: "100%",
     resizeMode: "cover" as const,
   },
-  heroOverlay: {
+  backBtnWrap: {
     position: "absolute" as const,
-    top: 0,
-    left: 0,
-    right: 0,
-    paddingHorizontal: 16,
-    paddingBottom: 12,
-    flexDirection: "row" as const,
-    justifyContent: "space-between" as const,
-    alignItems: "center" as const,
+    left: 16,
+    zIndex: 10,
   },
   backBtn: {
     width: 40,
@@ -402,24 +409,27 @@ const styles = {
     justifyContent: "center" as const,
   },
   bottomBar: {
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-    paddingHorizontal: 16,
-    paddingTop: 12,
+    position: "absolute" as const,
+    bottom: 0,
+    left: 0,
+    right: 0,
     backgroundColor: Colors.white,
+    paddingTop: 12,
+    paddingHorizontal: 16,
     shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 10,
     gap: 12,
   },
-  qtyControl: {
+  qtySection: {
     flexDirection: "row" as const,
     alignItems: "center" as const,
+    alignSelf: "center" as const,
     backgroundColor: Colors.primarySurface,
     borderRadius: 14,
-    paddingHorizontal: 6,
+    paddingHorizontal: 8,
     gap: 4,
   },
   qtyBtn: {
@@ -436,29 +446,38 @@ const styles = {
     width: 36,
     textAlign: "center" as const,
   },
-  orderBtn: {
-    flex: 1,
-    height: 50,
+  reserveBtn: {
+    height: 48,
     borderRadius: 14,
     backgroundColor: Colors.primary,
     flexDirection: "row" as const,
     alignItems: "center" as const,
     justifyContent: "center" as const,
+    gap: 8,
+    shadowColor: Colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 6,
   },
-  orderBtnText: {
-    fontSize: 17,
+  reserveBtnText: {
+    fontSize: 16,
+    fontWeight: "700" as const,
+    color: Colors.white,
+  },
+  totalWrap: {
+    flexDirection: "row" as const,
+    justifyContent: "space-between" as const,
+    alignItems: "center" as const,
+    paddingTop: 4,
+  },
+  totalLabel: {
+    fontSize: 12,
+    color: Colors.textMuted,
+  },
+  totalValue: {
+    fontSize: 18,
     fontWeight: "800" as const,
-    color: Colors.white,
-  },
-  orderBtnDivider: {
-    width: 1,
-    height: 20,
-    backgroundColor: "rgba(255,255,255,0.3)",
-    marginHorizontal: 12,
-  },
-  orderBtnLabel: {
-    fontSize: 15,
-    fontWeight: "600" as const,
-    color: Colors.white,
+    color: Colors.primary,
   },
 };

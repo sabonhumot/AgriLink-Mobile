@@ -10,21 +10,21 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useCart } from "@/context/CartContext";
+import { useReservation } from "@/context/ReservationContext";
 
 export default function CheckoutScreen() {
   const { top } = useSafeAreaInsets();
-  const { items, totalPrice, clearCart } = useCart();
+  const { items, totalPrice, clearReservations } = useReservation();
 
-  const handlePlaceOrder = () => {
+  const handleConfirm = () => {
     Alert.alert(
-      "Order Placed",
-      `Your order of ₱${totalPrice.toLocaleString()} has been placed successfully.`,
+      "Reservation Confirmed",
+      `Your reservation of ₱${totalPrice.toLocaleString()} has been sent to the farmer for confirmation.`,
       [
         {
           text: "OK",
           onPress: () => {
-            clearCart();
+            clearReservations();
             router.replace("/(buyer)/orders");
           },
         },
@@ -35,7 +35,7 @@ export default function CheckoutScreen() {
   if (items.length === 0) {
     return (
       <View style={{ flex: 1, backgroundColor: "#F8FAF9", alignItems: "center", justifyContent: "center" }}>
-        <Text style={{ fontSize: 16, color: Colors.textMuted }}>No items to checkout</Text>
+        <Text style={{ fontSize: 16, color: Colors.textMuted }}>No items to reserve</Text>
         <TouchableOpacity onPress={() => router.back()} style={{ marginTop: 12 }}>
           <Text style={{ color: Colors.primary, fontWeight: "600" }}>Go back</Text>
         </TouchableOpacity>
@@ -52,7 +52,7 @@ export default function CheckoutScreen() {
         <TouchableOpacity activeOpacity={0.7} style={styles.backBtn} onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={20} color={Colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Checkout</Text>
+        <Text style={styles.headerTitle}>Confirm Reservation</Text>
         <View style={{ width: 40 }} />
       </View>
 
@@ -60,8 +60,8 @@ export default function CheckoutScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {/* Delivery Info */}
-        <Text style={styles.sectionLabel}>Delivery Address</Text>
+        {/* Pickup Info */}
+        <Text style={styles.sectionLabel}>Pickup Location</Text>
         <View style={styles.card}>
           <View style={styles.addressRow}>
             <View style={styles.addressIcon}>
@@ -77,16 +77,16 @@ export default function CheckoutScreen() {
           </View>
         </View>
 
-        {/* Payment Method */}
+        {/* Payment */}
         <Text style={styles.sectionLabel}>Payment Method</Text>
         <View style={styles.card}>
           <View style={styles.paymentRow}>
             <View style={styles.paymentIcon}>
-              <Ionicons name="wallet-outline" size={20} color={Colors.primary} />
+              <Ionicons name="cash-outline" size={20} color={Colors.primary} />
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={styles.paymentName}>Cash on Delivery</Text>
-              <Text style={styles.paymentDesc}>Pay when your order arrives</Text>
+              <Text style={styles.paymentName}>Pay on Pickup</Text>
+              <Text style={styles.paymentDesc}>Pay when you collect your reservation</Text>
             </View>
             <View style={styles.radioActive}>
               <View style={styles.radioDot} />
@@ -94,8 +94,8 @@ export default function CheckoutScreen() {
           </View>
         </View>
 
-        {/* Order Summary */}
-        <Text style={styles.sectionLabel}>Order Summary</Text>
+        {/* Reservation Summary */}
+        <Text style={styles.sectionLabel}>Reservation Summary</Text>
         <View style={styles.card}>
           {items.map((item, i) => (
             <View
@@ -122,7 +122,7 @@ export default function CheckoutScreen() {
             <Text style={styles.totalValue}>₱{totalPrice.toLocaleString()}</Text>
           </View>
           <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Delivery Fee</Text>
+            <Text style={styles.totalLabel}>Pickup Fee</Text>
             <Text style={styles.totalValue}>Free</Text>
           </View>
           <View style={styles.totalDivider} />
@@ -137,10 +137,11 @@ export default function CheckoutScreen() {
       <View style={[styles.bottomBar, { paddingBottom: 16 }]}>
         <TouchableOpacity
           activeOpacity={0.8}
-          style={styles.placeOrderBtn}
-          onPress={handlePlaceOrder}
+          style={styles.confirmBtn}
+          onPress={handleConfirm}
         >
-          <Text style={styles.placeOrderText}>Place Order — ₱{totalPrice.toLocaleString()}</Text>
+          <Ionicons name="checkmark-circle-outline" size={20} color={Colors.white} />
+          <Text style={styles.confirmBtnText}>Confirm Reservation — ₱{totalPrice.toLocaleString()}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -333,19 +334,21 @@ const styles = {
     shadowRadius: 8,
     elevation: 8,
   },
-  placeOrderBtn: {
+  confirmBtn: {
+    flexDirection: "row" as const,
     height: 52,
     borderRadius: 14,
     backgroundColor: Colors.primary,
     alignItems: "center" as const,
     justifyContent: "center" as const,
+    gap: 8,
     shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 10,
     elevation: 6,
   },
-  placeOrderText: {
+  confirmBtnText: {
     fontSize: 16,
     fontWeight: "700" as const,
     color: Colors.white,

@@ -26,7 +26,10 @@ UI/UX only — no backend, mock data only.
 ## Routes
 - `app/index.tsx` — Get Started / landing page
 - `app/(auth)/` — Login, Register
-- `app/(buyer)/` — Browse, Orders, Notifications, Profile, Item details
+- `app/(buyer)/` — Stack layout wrapping tabs + item/checkout
+  - `(tabs)/` — Home, Orders, Reservations, Notifications, Profile (floating pill tab bar)
+  - `item.tsx` — Product details (no tab bar, sticky Reserve bar)
+  - `checkout.tsx` — Reservation confirmation (no tab bar)
 - `app/(farmer)/` — Dashboard, Orders, Add Listing, Notifications, Profile
 - `app/(coop)/` — Not yet built
 - `app/(coordinator)/` — Not yet built

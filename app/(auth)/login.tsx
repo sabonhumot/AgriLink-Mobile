@@ -40,7 +40,7 @@ export default function LoginScreen() {
   const isFocused = (name: string) => focusedField === name;
 
   const waveHeight = 50;
-  const topSectionHeight = SCREEN_H * 0.28;
+  const topSectionHeight = SCREEN_H * 0.32;
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.white }}>
@@ -61,8 +61,8 @@ export default function LoginScreen() {
           <Ionicons name="leaf-outline" size={18} color="rgba(255,255,255,0.12)" />
         </View>
 
-        {/* Logo top-right */}
-        <View style={[styles.logoWrap, { top: top + 12 }]}>
+        {/* Centered Logo */}
+        <View style={styles.logoSection}>
           <Image
             source={require("@/assets/images/AgriLink.png")}
             style={styles.logoImage}
@@ -237,21 +237,22 @@ const styles = {
   header: {
     backgroundColor: Colors.primary,
   },
-  logoWrap: {
-    position: "absolute" as const,
-    right: 24,
-    width: 40,
-    height: 40,
-    borderRadius: 10,
-    backgroundColor: "rgba(255,255,255,0.2)",
+  logoSection: {
+    flex: 1,
     alignItems: "center" as const,
     justifyContent: "center" as const,
   },
   logoImage: {
-    width: 26,
-    height: 26,
+    width: 80,
+    height: 80,
     resizeMode: "contain" as const,
     tintColor: Colors.white,
+    marginBottom: 12,
+  },
+  brandName: {
+    fontSize: 24,
+    fontWeight: "800" as const,
+    color: Colors.white,
   },
   decoStem1: {
     position: "absolute" as const,
