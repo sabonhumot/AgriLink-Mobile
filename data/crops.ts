@@ -8,6 +8,10 @@ export type CropType =
 
 export type Availability = "In Stock" | "Limited" | "Pre-order";
 
+export type ListingStatus = "active" | "sold_out" | "archived";
+
+export type ScheduleTag = "market_day" | "cooperative_store" | "special_event";
+
 export interface Crop {
   id: string;
   name: string;
@@ -20,6 +24,9 @@ export interface Crop {
   farmer: string;
   location: string;
   image: string;
+  status: ListingStatus;
+  scheduleTag: ScheduleTag;
+  vouched: boolean;
 }
 
 export const crops: Crop[] = [
@@ -35,6 +42,9 @@ export const crops: Crop[] = [
     farmer: "Juan Dela Cruz",
     location: "Nueva Ecija",
     image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400",
+    status: "active",
+    scheduleTag: "market_day",
+    vouched: true,
   },
   {
     id: "2",
@@ -48,6 +58,9 @@ export const crops: Crop[] = [
     farmer: "Maria Santos",
     location: "Pampanga",
     image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400",
+    status: "active",
+    scheduleTag: "market_day",
+    vouched: false,
   },
   {
     id: "3",
@@ -61,6 +74,9 @@ export const crops: Crop[] = [
     farmer: "Pedro Reyes",
     location: "Benguet",
     image: "https://images.unsplash.com/photo-1546470427-f22d2c7c2053?w=400",
+    status: "active",
+    scheduleTag: "cooperative_store",
+    vouched: true,
   },
   {
     id: "4",
@@ -74,6 +90,9 @@ export const crops: Crop[] = [
     farmer: "Ana Garcia",
     location: "Guimaras",
     image: "https://images.unsplash.com/photo-1534483509719-891398772614?w=400",
+    status: "active",
+    scheduleTag: "special_event",
+    vouched: false,
   },
   {
     id: "5",
@@ -87,6 +106,9 @@ export const crops: Crop[] = [
     farmer: "Carlos Mendoza",
     location: "Cagayan",
     image: "https://images.unsplash.com/photo-1596097635121-14b63a7e6e64?w=400",
+    status: "active",
+    scheduleTag: "market_day",
+    vouched: false,
   },
   {
     id: "6",
@@ -100,6 +122,9 @@ export const crops: Crop[] = [
     farmer: "Rosa Lim",
     location: "Isabela",
     image: "https://images.unsplash.com/photo-1587735243615-c03f25aaff15?w=400",
+    status: "active",
+    scheduleTag: "cooperative_store",
+    vouched: false,
   },
   {
     id: "7",
@@ -113,6 +138,9 @@ export const crops: Crop[] = [
     farmer: "Jose Bautista",
     location: "Quezon",
     image: "https://images.unsplash.com/photo-1615484477778-ca3b77940c25?w=400",
+    status: "active",
+    scheduleTag: "market_day",
+    vouched: false,
   },
   {
     id: "8",
@@ -126,6 +154,9 @@ export const crops: Crop[] = [
     farmer: "Elena Cruz",
     location: "Nueva Vizcaya",
     image: "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400",
+    status: "sold_out",
+    scheduleTag: "market_day",
+    vouched: false,
   },
   {
     id: "9",
@@ -139,6 +170,9 @@ export const crops: Crop[] = [
     farmer: "Miguel Torres",
     location: "Davao",
     image: "https://images.unsplash.com/photo-1597362925123-77861d3fbac7?w=400",
+    status: "active",
+    scheduleTag: "special_event",
+    vouched: true,
   },
   {
     id: "10",
@@ -152,6 +186,9 @@ export const crops: Crop[] = [
     farmer: "Liza Pascual",
     location: "Bukidnon",
     image: "https://images.unsplash.com/photo-1563746924237-f0e78b2fc57c?w=400",
+    status: "active",
+    scheduleTag: "cooperative_store",
+    vouched: false,
   },
   {
     id: "11",
@@ -165,6 +202,9 @@ export const crops: Crop[] = [
     farmer: "Antonio Ramos",
     location: "Tarlac",
     image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400",
+    status: "active",
+    scheduleTag: "market_day",
+    vouched: false,
   },
   {
     id: "12",
@@ -178,6 +218,25 @@ export const crops: Crop[] = [
     farmer: "Grace Villanueva",
     location: "Laguna",
     image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400",
+    status: "active",
+    scheduleTag: "market_day",
+    vouched: true,
+  },
+  {
+    id: "13",
+    name: "Heirloom Rice",
+    type: "Rice",
+    quantity: "0 kg",
+    price: 70,
+    unit: "kg",
+    harvestDate: "2026-06-10",
+    availability: "Pre-order",
+    farmer: "Luzviminda Cruz",
+    location: "Ifugao",
+    image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400",
+    status: "sold_out",
+    scheduleTag: "market_day",
+    vouched: false,
   },
 ];
 
@@ -188,4 +247,10 @@ export const cropTypes: CropType[] = [
   "Fruits",
   "Root Crops",
   "Legumes",
+];
+
+export const scheduleTags: ScheduleTag[] = [
+  "market_day",
+  "cooperative_store",
+  "special_event",
 ];

@@ -172,11 +172,13 @@ export default function LoginScreen() {
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity activeOpacity={0.7}>
-                <Text style={{ fontSize: 13, fontWeight: "600", color: Colors.primary }}>
-                  Forgot Password?
-                </Text>
-              </TouchableOpacity>
+              <Link href="/(auth)/forgot-password" asChild>
+                <TouchableOpacity activeOpacity={0.7}>
+                  <Text style={{ fontSize: 13, fontWeight: "600", color: Colors.primary }}>
+                    Forgot Password?
+                  </Text>
+                </TouchableOpacity>
+              </Link>
             </View>
 
             {/* Sign In Button */}

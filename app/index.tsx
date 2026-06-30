@@ -102,7 +102,7 @@ export default function GetStartedScreen() {
             <TouchableOpacity
               activeOpacity={0.8}
               style={styles.testButton}
-              onPress={() => Alert.alert("Coming Soon", "Cooperative screen not yet built")}
+              onPress={() => router.replace("/(coop)")}
             >
               <Ionicons name="people-outline" size={20} color={Colors.primary} />
               <Text style={styles.testButtonText}>Coop</Text>
@@ -111,10 +111,19 @@ export default function GetStartedScreen() {
             <TouchableOpacity
               activeOpacity={0.8}
               style={styles.testButton}
-              onPress={() => Alert.alert("Coming Soon", "Coordinator screen not yet built")}
+              onPress={() => router.replace("/(coordinator)")}
             >
               <Ionicons name="clipboard-outline" size={20} color={Colors.primary} />
               <Text style={styles.testButtonText}>Coordinator</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.testButton}
+              onPress={() => router.replace("/(admin)")}
+            >
+              <Ionicons name="settings-outline" size={20} color={Colors.primary} />
+              <Text style={styles.testButtonText}>Admin</Text>
             </TouchableOpacity>
           </View>
         </View>

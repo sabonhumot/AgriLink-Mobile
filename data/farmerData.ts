@@ -26,17 +26,39 @@ export interface FarmerNotification {
   read: boolean;
 }
 
+export type ListingStatus = "active" | "reserved" | "sold_out" | "vouched" | "archived" | "pending";
+export type QualityGrade = "A" | "B" | "C";
+export type ScheduleTag = "market_day" | "cooperative_store" | "special_event";
+
+export interface EditLogEntry {
+  field: string;
+  oldValue: string;
+  newValue: string;
+  reason: string;
+  date: string;
+}
+
 export interface Listing {
   id: string;
   name: string;
   type: string;
+  description?: string;
+  qualityGrade?: QualityGrade;
   quantity: string;
-  price: number;
+  quantityNum: number;
   unit: string;
+  price: number;
   availability: "In Stock" | "Limited" | "Pre-order";
   harvestDate: string;
   image: string;
+  images?: string[];
   totalSold: number;
+  reservedQuantity: number;
+  status: ListingStatus;
+  scheduleTag: ScheduleTag;
+  vouched: boolean;
+  createdAt: string;
+  editHistory?: EditLogEntry[];
 }
 
 export const mockFarmer = {
@@ -54,49 +76,127 @@ export const mockListings: Listing[] = [
     id: "1",
     name: "Fresh White Rice",
     type: "Rice",
+    description: "High-quality premium white rice harvested this season. Perfect for daily consumption.",
+    qualityGrade: "A",
     quantity: "500 kg",
+    quantityNum: 500,
     price: 45,
     unit: "kg",
     availability: "In Stock",
     harvestDate: "2026-06-20",
     image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400",
+    images: ["https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400"],
     totalSold: 120,
+    reservedQuantity: 0,
+    status: "active",
+    scheduleTag: "market_day",
+    vouched: true,
+    createdAt: "2026-06-01",
   },
   {
     id: "11",
     name: "Jasmine Rice",
     type: "Rice",
+    description: "Fragrant jasmine rice variety, known for its pleasant aroma and soft texture.",
+    qualityGrade: "A",
     quantity: "300 kg",
+    quantityNum: 300,
     price: 55,
     unit: "kg",
     availability: "In Stock",
     harvestDate: "2026-06-20",
     image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400",
+    images: ["https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400"],
     totalSold: 85,
+    reservedQuantity: 0,
+    status: "active",
+    scheduleTag: "cooperative_store",
+    vouched: false,
+    createdAt: "2026-06-05",
   },
   {
     id: "5",
     name: "Sweet Potatoes",
     type: "Root Crops",
+    description: "Locally grown sweet potatoes, rich in fiber and natural sweetness.",
+    qualityGrade: "B",
     quantity: "150 kg",
+    quantityNum: 150,
     price: 55,
     unit: "kg",
     availability: "In Stock",
     harvestDate: "2026-06-19",
     image: "https://images.unsplash.com/photo-1596097635121-14b63a7e6e64?w=400",
+    images: ["https://images.unsplash.com/photo-1596097635121-14b63a7e6e64?w=400"],
     totalSold: 40,
+    reservedQuantity: 25,
+    status: "reserved",
+    scheduleTag: "market_day",
+    vouched: false,
+    createdAt: "2026-06-03",
   },
   {
     id: "8",
     name: "Red Onions",
     type: "Root Crops",
+    description: "Fresh red onions from Nueva Vizcaya. Sharp flavor, perfect for cooking.",
+    qualityGrade: "A",
     quantity: "120 kg",
+    quantityNum: 120,
     price: 65,
     unit: "kg",
     availability: "Limited",
     harvestDate: "2026-06-17",
     image: "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400",
+    images: ["https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400"],
     totalSold: 60,
+    reservedQuantity: 40,
+    status: "sold_out",
+    scheduleTag: "market_day",
+    vouched: false,
+    createdAt: "2026-05-28",
+  },
+  {
+    id: "14",
+    name: "String Beans",
+    type: "Vegetables",
+    description: "Freshly picked string beans from Bukidnon. Crisp and tender.",
+    qualityGrade: "B",
+    quantity: "80 kg",
+    quantityNum: 80,
+    price: 50,
+    unit: "kg",
+    availability: "In Stock",
+    harvestDate: "2026-06-28",
+    image: "https://images.unsplash.com/photo-1563746924237-f0e78b2fc57c?w=400",
+    images: ["https://images.unsplash.com/photo-1563746924237-f0e78b2fc57c?w=400"],
+    totalSold: 0,
+    reservedQuantity: 0,
+    status: "active",
+    scheduleTag: "special_event",
+    vouched: false,
+    createdAt: "2026-06-25",
+  },
+  {
+    id: "15",
+    name: "Organic Tomatoes",
+    type: "Vegetables",
+    description: "Chemical-free organic tomatoes grown in Benguet highlands.",
+    qualityGrade: "A",
+    quantity: "60 kg",
+    quantityNum: 60,
+    price: 80,
+    unit: "kg",
+    availability: "In Stock",
+    harvestDate: "2026-07-01",
+    image: "https://images.unsplash.com/photo-1546470427-f22d2c7c2053?w=400",
+    images: ["https://images.unsplash.com/photo-1546470427-f22d2c7c2053?w=400"],
+    totalSold: 10,
+    reservedQuantity: 0,
+    status: "vouched",
+    scheduleTag: "cooperative_store",
+    vouched: true,
+    createdAt: "2026-06-20",
   },
 ];
 

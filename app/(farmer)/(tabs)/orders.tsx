@@ -65,7 +65,7 @@ export default function FarmerOrdersScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#F8FAF9" }}>
+    <View style={{ flex: 1, backgroundColor: Colors.background }}>
       <StatusBar barStyle="dark-content" />
 
       <View style={[styles.header, { paddingTop: top + 12 }]}>
@@ -219,7 +219,7 @@ function OrderCard({
 
 const styles = {
   header: {
-    backgroundColor: "#F8FAF9",
+    backgroundColor: Colors.background,
     paddingHorizontal: 20,
     paddingBottom: 8,
   },
